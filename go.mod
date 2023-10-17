@@ -1,4 +1,4 @@
-module github.com/PacePerspective/firestoredb-pkg
+module github.com/PacePerspective/firestoredb
 
 go 1.21.1
 
