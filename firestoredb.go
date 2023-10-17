@@ -15,6 +15,7 @@ type FirestoreClient struct {
 	client *firestore.Client
 }
 
+// NewFirestore returns a new Firestore NoSQL client
 func NewFirestore(projID, dbName string) (db.NoSQLClient, error) {
 	ctx, canc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer canc()
