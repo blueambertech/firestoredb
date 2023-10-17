@@ -1,4 +1,4 @@
-module github.com/PacePerspective/firestoredb
+module github.com/paceperspective/firestoredb
 
 go 1.21.1
 
