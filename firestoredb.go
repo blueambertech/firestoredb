@@ -7,6 +7,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/paceperspective/db"
+	"github.com/paceperspective/logging"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -28,6 +29,8 @@ func NewFirestore(projID, dbName string) (db.NoSQLClient, error) {
 
 // Read reads a record from the specified collection by ID and populates the outObj with the data
 func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (interface{}, error) {
+	_, span := logging.Tracer.Start(ctx, "firestoredb-read")
+	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
@@ -46,6 +49,8 @@ func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (inte
 
 // Insert inserts a new record into the specified collection with the data provided, returns the ID of the newly inserted record
 func (f *FirestoreClient) Insert(ctx context.Context, collection string, data interface{}) (string, error) {
+	_, span := logging.Tracer.Start(ctx, "firestoredb-insert")
+	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
 		return "", errors.New("could not find collection: " + collection)
@@ -58,28 +63,32 @@ func (f *FirestoreClient) Insert(ctx context.Context, collection string, data in
 }
 
 func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id string, data interface{}) error {
+	_, span := logging.Tracer.Start(ctx, "firestoredb-insert-with-id")
+	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
 		return errors.New("could not find collection: " + collection)
 	}
 	err := f.client.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		docRef := col.Doc(id)
-		_, err := tx.Get(docRef)
-		if status.Code(err) == codes.NotFound {
-			if err = tx.Set(docRef, data); err != nil {
-				return err
+		_, tErr := tx.Get(docRef)
+		if status.Code(tErr) == codes.NotFound {
+			if tErr = tx.Set(docRef, data); tErr != nil {
+				return tErr
 			}
 			return nil
-		} else if err == nil {
+		} else if tErr == nil {
 			return errors.New("doc already exists with id " + id)
 		}
-		return err
+		return tErr
 	})
 	return err
 }
 
 // Where reads records from the specified collection matching a key and value and populates the outObjs with the data
 func (f *FirestoreClient) Where(ctx context.Context, collection, key, value string) ([]map[string]interface{}, error) {
+	_, span := logging.Tracer.Start(ctx, "firestoredb-where")
+	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
