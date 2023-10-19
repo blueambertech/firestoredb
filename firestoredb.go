@@ -70,21 +70,25 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 	if col == nil {
 		return errors.New("could not find collection: " + collection)
 	}
-	log.Println("Trying to insert")
-	log.Printf("%v\n", data)
 	err := f.client.RunTransaction(ctx, func(c context.Context, tx *firestore.Transaction) error {
+		log.Println("Started transaction looking for id", id)
 		docRef := col.Doc(id)
 		_, tErr := tx.Get(docRef)
 		if status.Code(tErr) == codes.NotFound {
+			log.Println("Couldn't find that ID, setting a new docref")
 			if tErr = tx.Set(docRef, data); tErr != nil {
+				log.Println("Error when setting: ", tErr)
 				return tErr
 			}
+			log.Println("Success")
+
 			return nil
 		} else if tErr == nil {
 			return errors.New("doc already exists with id " + id)
 		}
 		return tErr
 	})
+	log.Println("Transaction finished")
 	return err
 }
 
