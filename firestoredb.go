@@ -3,6 +3,7 @@ package firestoredb
 import (
 	"context"
 	"errors"
+	"log"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -63,13 +64,15 @@ func (f *FirestoreClient) Insert(ctx context.Context, collection string, data in
 }
 
 func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id string, data interface{}) error {
-	_, span := logging.Tracer.Start(ctx, "firestoredb-insert-with-id")
+	_, span := logging.Tracer.Start(ctx, "firestoredb/insert-with-id")
 	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
 		return errors.New("could not find collection: " + collection)
 	}
-	err := f.client.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+	log.Println("Trying to insert")
+	log.Printf("%v\n", data)
+	err := f.client.RunTransaction(ctx, func(c context.Context, tx *firestore.Transaction) error {
 		docRef := col.Doc(id)
 		_, tErr := tx.Get(docRef)
 		if status.Code(tErr) == codes.NotFound {
