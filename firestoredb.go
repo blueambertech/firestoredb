@@ -27,16 +27,21 @@ func NewFirestore(projID, dbName string) (db.NoSQLClient, error) {
 }
 
 // Read reads a record from the specified collection by ID and populates the outObj with the data
-func (f *FirestoreClient) Read(ctx context.Context, collection, id string, outObj interface{}) error {
+func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (interface{}, error) {
 	col := f.client.Collection(collection)
 	if col == nil {
-		return errors.New("could not find collection: " + collection)
+		return nil, errors.New("could not find collection: " + collection)
 	}
 	obj, err := col.Doc(id).Get(ctx)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return obj.DataTo(outObj)
+	var outObj interface{}
+	err = obj.DataTo(outObj)
+	if err != nil {
+		return nil, err
+	}
+	return outObj, nil
 }
 
 // Insert inserts a new record into the specified collection with the data provided, returns the ID of the newly inserted record
@@ -74,17 +79,18 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 }
 
 // Where reads records from the specified collection matching a key and value and populates the outObjs with the data
-func (f *FirestoreClient) Where(ctx context.Context, collection, key, value string, outObjs []map[string]interface{}) error {
+func (f *FirestoreClient) Where(ctx context.Context, collection, key, value string) ([]map[string]interface{}, error) {
 	col := f.client.Collection(collection)
 	if col == nil {
-		return errors.New("could not find collection: " + collection)
+		return nil, errors.New("could not find collection: " + collection)
 	}
 	docs, err := col.Where(key, "==", value).Documents(ctx).GetAll()
 	if err != nil {
-		return err
+		return nil, err
 	}
-	for _, d := range docs {
-		outObjs = append(outObjs, d.Data())
+	m := make([]map[string]interface{}, len(docs))
+	for i, d := range docs {
+		m[i] = d.Data()
 	}
-	return nil
+	return m, nil
 }

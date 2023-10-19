@@ -4,7 +4,7 @@ go 1.21.1
 
 require (
 	cloud.google.com/go/firestore v1.13.0
-	github.com/paceperspective/db v0.0.0-20231017102647-3ef024fec687
+	github.com/paceperspective/db v0.0.2
 	google.golang.org/grpc v1.56.1
 )
 
