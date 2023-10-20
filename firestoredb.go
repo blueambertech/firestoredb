@@ -3,7 +3,6 @@ package firestoredb
 import (
 	"context"
 	"errors"
-	"log"
 	"time"
 
 	"cloud.google.com/go/firestore"
@@ -36,17 +35,13 @@ func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (inte
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
 	}
-	log.Println("Reading collection ", collection, "for ID", id)
 	obj, err := col.Doc(id).Get(ctx)
 	if err != nil {
 		return nil, err
 	}
-	log.Println("Found object")
-	log.Println(obj)
-	var outObj interface{}
+	var outObj map[string]interface{}
 	err = obj.DataTo(outObj)
 	if err != nil {
-		log.Println("Failed to write object data")
 		return nil, err
 	}
 	return outObj, nil
