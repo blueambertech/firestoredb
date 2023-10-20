@@ -74,8 +74,8 @@ github.com/googleapis/enterprise-certificate-proxy v0.2.4/go.mod h1:AwSRAtLfXpU5
 github.com/googleapis/gax-go/v2 v2.12.0 h1:A+gCJKdRfqXkr+BIRGtZLibNXf0m1f9E4HG56etFpas=
 github.com/googleapis/gax-go/v2 v2.12.0/go.mod h1:y+aIqrI5eb1YGMVJfuV3185Ts/D7qKpsEkdD5+I6QGU=
 github.com/grpc-ecosystem/grpc-gateway v1.16.0/go.mod h1:BDjrQk3hbvj6Nolgz8mAMFbcEtjT1g+wF4CSlocrBnw=
-github.com/paceperspective/db v0.0.2 h1:eWThmWuwJHH1Ss6zL1zB+Ow7iu3InTnJZVvYcASO7iA=
-github.com/paceperspective/db v0.0.2/go.mod h1:hM4iCnQz4qrUqrAv9THyf+Id/xE90Usw0Evqnb6nV00=
+github.com/paceperspective/db v0.0.4 h1:S5qF07jX02wiPqNXi6MWfnq7D9ODNTiAR1Xj8w4ua5o=
+github.com/paceperspective/db v0.0.4/go.mod h1:hM4iCnQz4qrUqrAv9THyf+Id/xE90Usw0Evqnb6nV00=
 github.com/paceperspective/logging v0.0.1 h1:J+HjnwcOJ5J3A9iYjZx+bJPXChsVGzhUTRt3fvljIOU=
 github.com/paceperspective/logging v0.0.1/go.mod h1:pLxtk6cYW1h2K6BIKqhlc245fbiLz0ouQe2PDIVGVEU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
