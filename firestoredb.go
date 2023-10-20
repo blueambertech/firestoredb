@@ -36,13 +36,17 @@ func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (inte
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
 	}
+	log.Println("Reading collection ", collection, "for ID", id)
 	obj, err := col.Doc(id).Get(ctx)
 	if err != nil {
 		return nil, err
 	}
+	log.Println("Found object")
+	log.Println(obj)
 	var outObj interface{}
 	err = obj.DataTo(outObj)
 	if err != nil {
+		log.Println("Failed to write object data")
 		return nil, err
 	}
 	return outObj, nil
@@ -71,24 +75,18 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 		return errors.New("could not find collection: " + collection)
 	}
 	err := f.client.RunTransaction(ctx, func(c context.Context, tx *firestore.Transaction) error {
-		log.Println("Started transaction looking for id", id)
 		docRef := col.Doc(id)
 		_, tErr := tx.Get(docRef)
 		if status.Code(tErr) == codes.NotFound {
-			log.Println("Couldn't find that ID, setting a new docref")
 			if tErr = tx.Set(docRef, data); tErr != nil {
-				log.Println("Error when setting: ", tErr)
 				return tErr
 			}
-			log.Println("Success")
-
 			return nil
 		} else if tErr == nil {
 			return errors.New("doc already exists with id " + id)
 		}
 		return tErr
 	})
-	log.Println("Transaction finished")
 	return err
 }
 
