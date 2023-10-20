@@ -40,7 +40,7 @@ func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (inte
 		return nil, err
 	}
 	var outObj map[string]interface{}
-	err = obj.DataTo(outObj)
+	err = obj.DataTo(&outObj)
 	if err != nil {
 		return nil, err
 	}
