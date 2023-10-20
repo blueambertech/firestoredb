@@ -27,6 +27,11 @@ func NewFirestore(projID, dbName string) (db.NoSQLClient, error) {
 	return &FirestoreClient{client: fsc}, nil
 }
 
+// Close closes down the firestore client
+func (f *FirestoreClient) Close() error {
+	return f.client.Close()
+}
+
 // Read reads a record from the specified collection by ID and populates the outObj with the data
 func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (interface{}, error) {
 	_, span := logging.Tracer.Start(ctx, "firestoredb-read")
