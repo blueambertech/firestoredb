@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/paceperspective/logging"
+	"github.com/blueambertech/logging"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

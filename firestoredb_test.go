@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/paceperspective/logging"
+	"github.com/blueambertech/logging"
 )
 
 func TestMain(m *testing.M) {
@@ -15,7 +15,7 @@ func TestMain(m *testing.M) {
 		log.Println("Failed to set firestore emulator env variable")
 		return
 	}
-	logging.Setup(context.Background(), "firestoredb-TEST")
+	logging.Setup(context.Background(), "firestoredb/TEST")
 
 	os.Exit(m.Run())
 }

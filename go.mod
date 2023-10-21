@@ -1,11 +1,10 @@
-module github.com/paceperspective/firestoredb
+module github.com/blueambertech/firestoredb
 
 go 1.21.1
 
 require (
 	cloud.google.com/go/firestore v1.13.0
-	github.com/paceperspective/db v0.0.4
-	github.com/paceperspective/logging v0.0.1
+	github.com/blueambertech/logging v0.0.2
 	google.golang.org/grpc v1.56.1
 )
 
