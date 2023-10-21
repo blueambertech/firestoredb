@@ -33,7 +33,7 @@ func (f *FirestoreClient) Close() error {
 
 // Read reads a record from the specified collection by ID and populates the outObj with the data
 func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (map[string]interface{}, error) {
-	_, span := logging.Tracer.Start(ctx, "firestoredb-read")
+	_, span := logging.Tracer.Start(ctx, "firestoredb/read")
 	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
@@ -53,7 +53,7 @@ func (f *FirestoreClient) Read(ctx context.Context, collection, id string) (map[
 
 // Insert inserts a new record into the specified collection with the data provided, returns the ID of the newly inserted record
 func (f *FirestoreClient) Insert(ctx context.Context, collection string, data interface{}) (string, error) {
-	_, span := logging.Tracer.Start(ctx, "firestoredb-insert")
+	_, span := logging.Tracer.Start(ctx, "firestoredb/insert")
 	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
@@ -93,7 +93,7 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 
 // Where reads records from the specified collection matching a key and value and populates the outObjs with the data
 func (f *FirestoreClient) Where(ctx context.Context, collection, key, value string) ([]map[string]interface{}, error) {
-	_, span := logging.Tracer.Start(ctx, "firestoredb-where")
+	_, span := logging.Tracer.Start(ctx, "firestoredb/where")
 	defer span.End()
 	col := f.client.Collection(collection)
 	if col == nil {
