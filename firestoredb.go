@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/paceperspective/db"
 	"github.com/paceperspective/logging"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -17,7 +16,7 @@ type FirestoreClient struct {
 }
 
 // NewFirestore returns a new Firestore NoSQL client
-func NewFirestore(projID, dbName string) (db.NoSQLClient, error) {
+func NewFirestore(projID, dbName string) (*FirestoreClient, error) {
 	ctx, canc := context.WithTimeout(context.Background(), 5*time.Second)
 	defer canc()
 	fsc, err := firestore.NewClientWithDatabase(ctx, projID, dbName)
