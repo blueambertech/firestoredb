@@ -84,13 +84,14 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 	return err
 }
 
-// Where reads documents from the specified collection matching a key and value and populates the outObjs with the data
-func (f *FirestoreClient) Where(ctx context.Context, collection, key, value string) ([]map[string]interface{}, error) {
+// Where reads documents from the specified collection using a key, operator and value. Operator must be one of
+// "==", "!=", "<", "<=", ">", ">=", "array-contains", "array-contains-any", "in" or "not-in"
+func (f *FirestoreClient) Where(ctx context.Context, collection, key, operator, value string) ([]map[string]interface{}, error) {
 	col := f.client.Collection(collection)
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
 	}
-	docs, err := col.Where(key, "==", value).Documents(ctx).GetAll()
+	docs, err := col.Where(key, operator, value).Documents(ctx).GetAll()
 	if err != nil {
 		return nil, err
 	}
