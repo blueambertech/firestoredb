@@ -86,7 +86,7 @@ func (f *FirestoreClient) InsertWithID(ctx context.Context, collection, id strin
 
 // Where reads documents from the specified collection using a key, operator and value. Operator must be one of
 // "==", "!=", "<", "<=", ">", ">=", "array-contains", "array-contains-any", "in" or "not-in"
-func (f *FirestoreClient) Where(ctx context.Context, collection, key, operator, value string) ([]map[string]interface{}, error) {
+func (f *FirestoreClient) Where(ctx context.Context, collection, key, operator, value string) (map[string]map[string]interface{}, error) {
 	col := f.client.Collection(collection)
 	if col == nil {
 		return nil, errors.New("could not find collection: " + collection)
@@ -95,9 +95,9 @@ func (f *FirestoreClient) Where(ctx context.Context, collection, key, operator, 
 	if err != nil {
 		return nil, err
 	}
-	m := make([]map[string]interface{}, len(docs))
-	for i, d := range docs {
-		m[i] = d.Data()
+	m := make(map[string]map[string]interface{}, len(docs))
+	for _, d := range docs {
+		m[d.Ref.ID] = d.Data()
 	}
 	return m, nil
 }
